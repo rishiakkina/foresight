@@ -1,14 +1,17 @@
-# Turborepo starter
+# Foresight - Web2 Prediction Market
 
-This Turborepo starter is maintained by the Turborepo core team.
+A full-stack prediction market platform (similar to Polymarket) built entirely with Web2 technologies—no blockchain or crypto required. Users can create, bet on, and resolve prediction markets using virtual tokens stored in a PostgreSQL database.
 
-## Using this example
+## Tech Stack
 
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
+- **Frontend**: Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: Express 5 (TypeScript ESM), Node.js 20
+- **Database**: PostgreSQL 14+ with Prisma ORM
+- **Auth**: NextAuth.js (Google, GitHub, Credentials)
+- **Real-time**: Socket.IO with optional Redis adapter
+- **State Management**: TanStack Query (React Query)
+- **Validation**: Zod (shared schemas between client/server)
+- **Monorepo**: Turborepo
 
 ## What's inside?
 
@@ -16,13 +19,23 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `web`: Next.js frontend application
+- `api`: Express REST API server with Socket.IO
+- `@foresight/db`: Prisma schema and database client
+- `@foresight/schemas`: Shared Zod validation schemas
+- `@foresight/eslint-config`: ESLint configurations
+- `@foresight/typescript-config`: Shared TypeScript configs
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+
+## Core Features
+
+- **User Authentication**: OAuth (Google/GitHub) and credential-based auth via NextAuth
+- **Market Creation**: Create prediction markets with multiple options, deadlines, and categories
+- **Betting System**: Parimutuel pool-based betting with virtual tokens
+- **Market Resolution**: Admin/resolver role to settle markets and distribute payouts
+- **Real-time Updates**: Live market updates and bet notifications via WebSockets
+- **Token Economy**: Virtual token system with initial allocation and transaction ledger
 
 ### Utilities
 

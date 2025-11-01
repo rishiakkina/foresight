@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+enum MarketStatus {
+  active
+  locked
+  resolved
+}
+
+enum Category {
+  political
+  science
+  AI
+  crypto
+  sports
+}
+
+model User {
+  id                 String  @id @default(uuid())
+  email              String  @unique
+  username           String  @unique
+  password           String
+
+  tokenBalance       Int @default(1000)
+  role               Role @default(user)
+
+  marketsCreated     Market[] @relation("marketCreator")
+  betsCreated        Bet[] @relation("betCreator")
+  transactions       Transaction[] @relation("transaction")
+}
+
+model Market {
+  id                 String @id @default(uuid())
+  title              String @unique
+  description        String
+  category           Category
+  resolutionDeadline DateTime
+  status             MarketStatus @default(active)
+  outcome            Boolean
+
+  creatorId          String
+  creator            User  @relation("marketCreator", fields : [creatorId], references : [id])
+
+  liquidity          Float @default(100)
+  yesShares          Float @default(0)
+  noShares           Float @default(0)
+  volume             Float @default(0)
+
+  createdAt          DateTime @default(now())
+
+  bets               Bet[] @relation("marketBet")
+}
+
+model Bet {
+  id                 String @id @default(uuid())
+  userId             String
+  user               User @relation("betCreator", fields : [userId], references : [id])
+  marketId           String
+  market             Market @relation("marketBet", fields : [marketId], references : [id])
+
+  outcome            Boolean
+  amount             Int
+  shares             Float
+  oddsAtBet          Float
+
+  status             BetStatus @default(active)
+  payout             Int?
+
+  createdAt          DateTime @default(now())
+}
+
+enum BetStatus {
+  active
+  won
+  lost
+}
+
+model Transaction {
+  id                 String @id @default(uuid())
+  userId             String
+  user               User @relation("transaction", fields : [userId], references : [id])
+
+  type               TransactionType
+  amount             Float
+  
+  createdAt          DateTime @default(now())
+}
+
+enum TransactionType {
+  bet_placed
+  bet_won
+}

@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/server.ts","./src/middleware/auth.ts","./src/routes/betsrouter.ts","./src/routes/index.ts","./src/routes/marketsrouter.ts","./src/routes/usersrouter.ts","./src/services/bets-service.ts","./src/services/markets-service.ts","./src/services/resolution.ts","./src/services/user-service.ts","./src/types/express.d.ts"],"version":"5.9.2"}
