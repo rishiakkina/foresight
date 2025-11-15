@@ -1,4 +1,5 @@
 import prismaClient from "@foresight/db"
+// import { marketQueue } from "./resolution.js";
 
 interface Market {
     title : string,
@@ -6,6 +7,8 @@ interface Market {
     category : string,
     resolutionDeadline : Date
 }
+
+
 const createMarket = async (id : string, market : Market) => {
     try {
         if(!market.title || !market.resolutionDeadline){
@@ -28,6 +31,9 @@ const createMarket = async (id : string, market : Market) => {
                 creatorId : id
             }
         })
+
+        // const delay = newMarket.resolutionDeadline.getTime() - Date.now();
+        // await marketQueue.add("close-market", { marketId : newMarket.id }, { delay });
         return newMarket;
     } catch (err) {
         console.log(`An error occured : ${err}`)

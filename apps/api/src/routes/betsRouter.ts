@@ -6,18 +6,18 @@ import { getUserBets, placeBet } from "../services/bets-service.js";
 const betsRouter = Router();
 
 betsRouter.post("/place-bet", authMiddleware, async (req : AuthenticatedRequest, res : Response) => {
-    const { userId } = req;0
-    if(!userId){
+    const { userId, role } = req;
+    if(!userId || role !== "user"){
         return res.status(401).json({msg : "Unauthorized, token is invalid"})
     }
-    const { marketId, amount, choice } = req.body;
-    if(!marketId || !amount){
-        return res.status(400).json({msg : "Market ID and amount are required"})
+    const { marketId, amount, choice } = req.body as { marketId : string, amount : number, choice : boolean };
+    if(!marketId || !amount || !choice){
+        return res.status(400).json({msg : "Market ID, amount and choice are required"})
     }
 
     const result = await placeBet(userId, marketId, amount, choice);
     
-    if(!result.Bet){
+    if(!result || !result.Bet){
         return res.status(500).json({msg : "Failed to place bet"})
     }
     return res.status(200).json({
@@ -28,8 +28,8 @@ betsRouter.post("/place-bet", authMiddleware, async (req : AuthenticatedRequest,
 })
 
 betsRouter.get("/my-bets", authMiddleware, async (req : AuthenticatedRequest, res : Response) => {
-    const { userId } = req;
-    if(!userId){
+    const { userId, role } = req;
+    if(!userId || role !== "user"){
         return res.status(401).json({msg : "Unauthorized, token is invalid"})
     }
     const { marketId } = req.query as { marketId : string };

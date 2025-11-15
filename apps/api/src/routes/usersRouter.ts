@@ -33,7 +33,7 @@ usersRouter.post("/login", async (req : Request, res : Response) => {
         return res.status(500).json({msg : "Failed to login"});
     }
     const token = jwt.sign({ userId : user.id, role : user.role }, process.env.JWT_SECRET!);
-    return res.status(200).json({ token });
+    return res.status(200).json({ token, user });
 })
 
 
